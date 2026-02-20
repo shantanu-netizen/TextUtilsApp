@@ -1,12 +1,152 @@
-*{
-  margin: 0px;
-  padding: 0px;
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
+
+/* Dark mode: ensure all text and form elements inherit theme */
+[data-theme="dark"] .form-label,
+[data-theme="dark"] .form-control::placeholder,
+[data-theme="dark"] .card-title,
+[data-theme="dark"] .card-text,
+[data-theme="dark"] h1, [data-theme="dark"] h2, [data-theme="dark"] h5 {
+  color: #e9ecef !important;
+}
+[data-theme="dark"] .form-control {
+  background-color: #343a40 !important;
+  border-color: #495057 !important;
+  color: #e9ecef !important;
+}
+
 #root {
+  width: 100%;
+  min-height: 100vh;
+  text-align: left;
+}
+
+/* Main content: max-width and padding only for content area, not navbar */
+.app-content {
+  width: 100%;
   max-width: 1280px;
   margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+  padding: 1rem;
+}
+
+@media (min-width: 768px) {
+  .app-content {
+    padding: 1.5rem 2rem;
+  }
+}
+
+/* ----- Navbar responsive overrides ----- */
+.navbar-brand {
+  font-size: 1.1rem;
+  white-space: nowrap;
+}
+
+.navbar .navbar-brand img {
+  width: 32px;
+  height: auto;
+}
+
+@media (min-width: 992px) {
+  .navbar .navbar-brand img {
+    width: 42px;
+  }
+  .navbar-brand {
+    font-size: 1.25rem;
+  }
+}
+
+/* Toggler visible on dark background */
+.navbar .navbar-toggler {
+  border-color: rgba(255, 255, 255, 0.5);
+  padding: 0.35rem 0.6rem;
+}
+
+.navbar .navbar-toggler-icon {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(255, 255, 255, 0.9)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+}
+
+/* Collapsed menu: full-width search and stacked layout */
+@media (max-width: 991.98px) {
+  .navbar .navbar-collapse {
+    padding-top: 0.75rem;
+  }
+  .navbar .navbar-nav {
+    margin-bottom: 0.5rem;
+  }
+}
+
+/* Search form: full width inside collapse on small screens */
+.navbar .navbar-collapse form.d-flex {
+  flex-wrap: wrap;
+  width: 100%;
+}
+.navbar .navbar-collapse .form-control {
+  min-width: 0;
+  flex: 1 1 auto;
+}
+.navbar .navbar-collapse .btn {
+  flex: 0 0 auto;
+}
+
+@media (max-width: 991.98px) {
+  .navbar .navbar-collapse form.d-flex {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .navbar .navbar-collapse .form-control {
+    margin-right: 0 !important;
+    margin-bottom: 0.5rem;
+  }
+}
+
+/* ----- TextForm / pages responsive ----- */
+.page-title-row {
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+.page-title {
+  font-size: 1.35rem;
+  line-height: 1.3;
+}
+@media (min-width: 576px) {
+  .page-title {
+    font-size: 1.5rem;
+  }
+}
+@media (min-width: 768px) {
+  .page-title {
+    font-size: 1.75rem;
+  }
+}
+
+/* Transformation buttons: comfortable tap targets on mobile */
+.text-transform-buttons .btn {
+  min-height: 38px;
+}
+
+/* Summary cards: single column on very small screens (Bootstrap col-12 by default in row) */
+/* Reduce card padding on small screens */
+@media (max-width: 576px) {
+  .card-body {
+    padding: 0.75rem 1rem;
+  }
+  .card-body .display-6 {
+    font-size: 1.5rem;
+  }
+}
+
+/* About page */
+.about-container {
+  padding-top: 0.5rem;
+  padding-bottom: 2rem;
+}
+@media (min-width: 768px) {
+  .about-container {
+    padding-top: 1rem;
+  }
 }
 
 .logo {
@@ -20,15 +160,10 @@
   filter: drop-shadow(0 0 2em #646cffaa);
 }
 
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
-}
-
 @keyframes logo-spin {
   from {
     transform: rotate(0deg);
   }
-
   to {
     transform: rotate(360deg);
   }

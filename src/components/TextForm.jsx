@@ -5,7 +5,24 @@ export default function TextForm(props) {
     const [darkMode, setDarkMode] = useState(false)
     const [copySuccess, setCopySuccess] = useState(false)
 
-  
+    // Sync document body with dark mode so the whole page (including padding areas) is themed
+    useEffect(() => {
+        if (darkMode) {
+            document.body.setAttribute('data-theme', 'dark')
+            document.body.style.backgroundColor = '#212529'
+            document.body.style.color = '#e9ecef'
+        } else {
+            document.body.removeAttribute('data-theme')
+            document.body.style.backgroundColor = ''
+            document.body.style.color = ''
+        }
+        return () => {
+            document.body.removeAttribute('data-theme')
+            document.body.style.backgroundColor = ''
+            document.body.style.color = ''
+        }
+    }, [darkMode])
+
     const wordCount = text.trim() === '' ? 0 : text.trim().split(/\s+/).length
     const charCount = text.length
     const charCountNoSpaces = text.replace(/\s/g, '').length
@@ -14,15 +31,17 @@ export default function TextForm(props) {
     const readingTime = (wordCount / 200).toFixed(2) 
     const darkModeStyle = {
         backgroundColor: darkMode ? '#212529' : 'white',
-        color: darkMode ? 'white' : 'black',
+        color: darkMode ? '#e9ecef' : 'black',
         minHeight: '100vh',
-        padding: '20px'
+        padding: '1.25rem',
+        transition: 'background-color 0.2s ease, color 0.2s ease'
     }
 
     const textAreaStyle = {
         backgroundColor: darkMode ? '#343a40' : 'white',
-        color: darkMode ? 'white' : 'black',
-        border: darkMode ? '1px solid #495057' : '1px solid #ced4da'
+        color: darkMode ? '#e9ecef' : 'black',
+        border: darkMode ? '1px solid #495057' : '1px solid #ced4da',
+        transition: 'background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease'
     }
 
    
@@ -36,22 +55,6 @@ export default function TextForm(props) {
 
     const handleClear = () => {
         setText('')
-    }
-
-    const handleCapitalize = () => {
-        const words = text.split(' ')
-        const capitalized = words.map(word =>
-            word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
-        ).join(' ')
-        setText(capitalized)
-    }
-
-    const handleTitleCase = () => {
-        const words = text.toLowerCase().split(' ')
-        const titleCase = words.map(word =>
-            word.charAt(0).toUpperCase() + word.slice(1)
-        ).join(' ')
-        setText(titleCase)
     }
 
     const handleRemoveExtraSpaces = () => {
@@ -68,18 +71,6 @@ export default function TextForm(props) {
         }
     }
 
-    const handleReverseText = () => {
-        setText(text.split('').reverse().join(''))
-    }
-
-    const handleRemoveNumbers = () => {
-        setText(text.replace(/\d/g, ''))
-    }
-
-    const handleRemoveSpecialChars = () => {
-        setText(text.replace(/[^a-zA-Z0-9\s]/g, ''))
-    }
-
     const handleChange = (e) => {
         setText(e.target.value)
     }
@@ -90,14 +81,14 @@ export default function TextForm(props) {
 
     return (
         <div style={darkModeStyle}>
-            <div className="container my-3">
-                <div className="d-flex justify-content-between align-items-center mb-3">
-                    <h1 className="mb-0">TextUtils - Word Counter</h1>
+            <div className="container my-3 px-2 px-md-3">
+                <div className="d-flex justify-content-between align-items-center flex-wrap gap-2 page-title-row mb-3">
+                    <h1 className="mb-0 page-title">TextUtils - Word Counter</h1>
                     <button
-                        className={`btn ${darkMode ? 'btn-light' : 'btn-dark'}`}
+                        className={`btn ${darkMode ? 'btn-light' : 'btn-dark'} flex-shrink-0`}
                         onClick={toggleDarkMode}
                     >
-                        {darkMode ?  'Light Mode' :  'Dark Mode'}
+                        {darkMode ? 'Light Mode' : 'Dark Mode'}
                     </button>
                 </div>
 
@@ -118,31 +109,18 @@ export default function TextForm(props) {
 
                 <div className="mb-3">
                     <h5>Text Transformations:</h5>
-                    <div className="d-flex flex-wrap gap-2">
+                    <div className="d-flex flex-wrap gap-2 text-transform-buttons">
                         <button className="btn btn-success" onClick={handleUpClick} disabled={text.length === 0}>
                             UPPERCASE
                         </button>
                         <button className="btn btn-success" onClick={handleLoClick} disabled={text.length === 0}>
                             lowercase
                         </button>
-                        <button className="btn btn-primary" onClick={handleCapitalize} disabled={text.length === 0}>
-                            Capitalize
-                        </button>
-                        <button className="btn btn-primary" onClick={handleTitleCase} disabled={text.length === 0}>
-                            Title Case
-                        </button>
+                        
                         <button className="btn btn-warning" onClick={handleRemoveExtraSpaces} disabled={text.length === 0}>
                             Remove Extra Spaces
                         </button>
-                        <button className="btn btn-info" onClick={handleReverseText} disabled={text.length === 0}>
-                            Reverse Text
-                        </button>
-                        <button className="btn btn-secondary" onClick={handleRemoveNumbers} disabled={text.length === 0}>
-                            Remove Numbers
-                        </button>
-                        <button className="btn btn-secondary" onClick={handleRemoveSpecialChars} disabled={text.length === 0}>
-                            Remove Special Characters
-                        </button>
+                        
                         <button className="btn btn-danger" onClick={handleClear} disabled={text.length === 0}>
                             Clear Text
                         </button>
